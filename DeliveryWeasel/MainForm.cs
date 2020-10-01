@@ -1,4 +1,6 @@
 ﻿using DeliveryWeasel.UserControls;
+using ProductionDataAccess.Services;
+using ProductionDataAccess.Services.DataAccess.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,18 +14,36 @@ namespace DeliveryWeasel
 {
     public partial class MainForm : Form
     {
+
+        private readonly DeliveryService _deliverServices;
         public MainForm()
         {
             InitializeComponent();
+            _deliverServices = new DeliveryService();
+            
 
-            closeImage = Properties.Resources.twotone_highlight_off_black_18dp;    
+            closeImage = Properties.Resources.baseline_close_black_18dp;    
             tbcWorkSurface.Padding = new System.Drawing.Point(16, 6);
 
             DeliveriesListControl delivControl = new DeliveriesListControl();
 
             spcMainSplitContainer.Panel1.Controls.Add(delivControl);
             delivControl.Dock = DockStyle.Fill;
+            delivControl.OnDeliverySelected += DelivControl_OnDeliverySelected;
         }
+
+        private void DelivControl_OnDeliverySelected(object sender, DeliveriesListControl.DeliverySelectedEventArgs e)
+        {
+            var result = e.selectedDelivery;
+         
+            string activeJob = e.selectedDelivery.JobName;
+            this.tbcWorkSurface.TabPages["tbJobProducts"].Text = activeJob;
+
+            TabPage tb = new TabPage(e.selectedDelivery.DeliveryID.ToString());
+            tbcWorkSurface.TabPages.Add(tb);
+        }
+
+      
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -76,6 +96,16 @@ namespace DeliveryWeasel
                
                 { tbcWorkSurface.TabPages.Remove(tabpage); }
             }
+        }
+
+        private void tspMainTooBar_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void tbJobProducts_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

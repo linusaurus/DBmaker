@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Boxed.Mapping;
+using Microsoft.EntityFrameworkCore;
 using DBmaker.Data;
 using DBmaker.Models;
 using ProductionDataAccess.Mappers;
@@ -14,15 +15,17 @@ namespace ProductionDataAccess.Services
     {
 
         ProductionContext ctx;
-       
+        private readonly DeliveryMapper deliveryMapper;
+
         public DeliveryService()
         {
             ctx = new ProductionContext();
+            deliveryMapper = new DeliveryMapper();
         }
 
         public List<EmployeeDto> EmployeeList()
         {
-            var result = ctx.Employee.Select( d => new EmployeeDto
+            var result = ctx.Employee.Select(d => new EmployeeDto
             {
                 EmployeeID = d.employeeID,
                 EmployeeName = d.firstname + ' ' + d.lastname
@@ -31,6 +34,22 @@ namespace ProductionDataAccess.Services
 
             return result;
         }
+
+        public DeliveryDto FindDelivery(int deliveryID)
+        {
+            var entity = ctx.Delivery.AsNoTracking().Include(j => j.Job)
+                    .Include(s => s.JobSite).Include(e => e.Employee)
+                    .Include(i => i.DeliveryItem).Where(d => d.DeliveryID == deliveryID).FirstOrDefault();
+            DeliveryDto Dto = new DeliveryDto();
+            deliveryMapper.Map(entity, Dto);
+            return Dto;
+
+        }
+
+        //public List<DeliveryItemDto> GetDeliveryItems()
+        //{
+
+        //}
 
         public DeliveryDto New(int jobID,int empid)
         {
@@ -64,15 +83,17 @@ namespace ProductionDataAccess.Services
 
         public List<DeliveryDto> JobDeliveries(int jobid)
         {
-            var result = ctx.Delivery.Where(j => j.JobID == jobid).OrderByDescending(r => r.DeliveryID).Select(d => new DeliveryDto
+            var result = ctx.Delivery.Include(s => s.DeliveryItem).Where(j => j.JobID == jobid).OrderByDescending(r => r.DeliveryID).Select(d => new DeliveryDto
             {
                 DeliveryDate = d.DeliveryDate,
                 DeliveryID = d.DeliveryID,
                 DriverName = d.Employee.firstname + ' ' + d.Employee.lastname,
                 EmployeeID = d.EmployeeID,
                 JobID = d.JobID,
-                JobSiteID = d.JobSiteID
-
+                JobName = d.Job.JobName,
+                JobSiteID = d.JobSiteID,
+    
+   
             }).ToList();
 
             return result;

@@ -19,19 +19,32 @@ namespace ProductionDataAccess.Services
     public class ProductService
         {
             private readonly ProductionContext ctx;
+
             private readonly ProductMapper productMapper = new ProductMapper();
-        private readonly JobMapper jobMapper = new JobMapper();
+            private readonly JobMapper jobMapper = new JobMapper();
+            private readonly JobProductMapper jobProductMapper = new JobProductMapper();
+        
 
             public ProductService()
             {
-            ctx = new ProductionContext();
-
+                ctx = new ProductionContext();
             }
 
-            public List<Product> GetJobUnits(int jobID)
+            public JobListDto GetJobProducts(int jobID)
             {
-                return ctx.Product.Include(p => p.SubAssembly).Where(j => j.JobID == jobID).ToList();
+                  Job job = ctx.Job.Include(p => p.Product).ThenInclude(s => s.SubAssembly).Where(j => j.JobID == jobID).FirstOrDefault();
+                  JobListDto dto = new JobListDto();
+
+                   jobProductMapper.Map(job,  dto);
+                 
+                  return dto;
             }
+
+            //public List<ProductDto> GetJobProducts(int jobID)
+            //{
+          
+
+            //}
 
         public JobListDto GetProducts(int jobID)
         {

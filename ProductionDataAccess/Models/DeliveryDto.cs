@@ -28,7 +28,19 @@ namespace ProductionDataAccess.Models
         public string state { get; set; }
         public string zip { get; set; }
 
+        public int itemCount { get; set; }
+
         public Geometry location { get; set; }
+
+        public int ItemCount
+        {
+            get { return itemCount; }
+            set
+            {
+                itemCount = value;
+                OnPropertyChanged();
+            }
+        }
 
         public int DeliveryID 
         {

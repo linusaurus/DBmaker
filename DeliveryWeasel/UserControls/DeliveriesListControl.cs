@@ -24,7 +24,41 @@ namespace DeliveryWeasel.UserControls
         JobListDto _activeJob;
         DeliveryDto _selectedDelivery = new DeliveryDto();
 
-        public event EventHandler OnDeliverySelectedHandler;
+       // Delivery Selected Event Structure
+        public delegate void   OnDeliverySelectedHandler(object sender, DeliverySelectedEventArgs e);
+        public event OnDeliverySelectedHandler OnDeliverySelected;
+
+        public delegate void OnJobSelectedHandler(object sender, JobSelectedEventArgs e);
+        public event OnJobSelectedHandler OnJobSelected;
+       
+         public class JobSelectedEventArgs : EventArgs
+        {
+            public int JobID { get; set; } 
+        }
+        public class DeliverySelectedEventArgs : EventArgs
+        { 
+            public DeliveryDto selectedDelivery { get; set; }
+        }
+
+        protected virtual void OnSelectJob(JobSelectedEventArgs e)
+        {
+            if (OnJobSelected != null)
+            {
+                JobSelectedEventArgs args = new JobSelectedEventArgs { JobID = _activeJob.JobID };
+                OnJobSelected(this, args);
+            }
+        }
+
+        protected virtual void OnSelectDelivery(DeliverySelectedEventArgs e)
+        {
+            if (OnDeliverySelected != null)
+            {
+                DeliverySelectedEventArgs args = new DeliverySelectedEventArgs { selectedDelivery = _selectedDelivery };
+                OnDeliverySelected(this, args);
+            }
+        }
+
+        
 
         private bool isDirty;
 
@@ -76,11 +110,8 @@ namespace DeliveryWeasel.UserControls
 
         #endregion
 
-        public class DeliverySelectedEventArgs : EventArgs
-        {
-            public DeliveryDto selectedDelivery { get; set; }           
-        }
-
+             
+      
         public void SaveChanges()
         {
            _deliveryService.CreateOrUpdateDelivery(_selectedDelivery);
@@ -97,17 +128,14 @@ namespace DeliveryWeasel.UserControls
             
             bsSelectedDelivery.DataSource = _selectedDelivery;
             dgDeliveryGrid.DataSource = bsDeliveries;
-            bsDeliveries.CurrentItemChanged += BsDeliveries_CurrentItemChanged;
+     
             BindControls();
             BindEmployeePicker();
 
             bsDeliveries.ListChanged += BsDeliveries_ListChanged;
         }
 
-        private void BsDeliveries_CurrentItemChanged(object sender, EventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
+      
 
         private void BsDeliveries_ListChanged(object sender, ListChangedEventArgs e)
         { CheckForDirtyState(e);}
@@ -116,7 +144,7 @@ namespace DeliveryWeasel.UserControls
         private void BindControls()
         {
             txtDeliverID.DataBindings.Clear();
-            txtDeliverID.DataBindings.Add("Text", bsSelectedDelivery.Current, "DeliveryID", true, DataSourceUpdateMode.OnPropertyChanged);
+            txtDeliverID.DataBindings.Add("Text", bsSelectedDelivery, "DeliveryID", true, DataSourceUpdateMode.OnPropertyChanged);
            
             dateTimePicker1.DataBindings.Clear();
             dateTimePicker1.DataBindings.Add("Text", bsSelectedDelivery, "DeliveryDate");
@@ -195,13 +223,7 @@ namespace DeliveryWeasel.UserControls
            
         }
     
-        protected virtual void OnSelectDelivery(EventArgs e)
-        {
-            if (OnDeliverySelectedHandler != null)
-            {
-                OnDeliverySelectedHandler(this, e);
-            }
-        }
+       
 
         private void btnNew_Click(object sender, EventArgs e)
         {
@@ -214,18 +236,22 @@ namespace DeliveryWeasel.UserControls
 
         private void dgDeliveryGrid_SelectionChanged_1(object sender, EventArgs e)
         {
-            DataGridView dg = (DataGridView)sender;
-            if (dg.DataSource != null)
+            if (dgDeliveryGrid.DataSource != null)
             {
-                if (dg.Rows.Count > 0)
+                BindingManagerBase bm = BindingContext[dgDeliveryGrid.DataSource, dgDeliveryGrid.DataMember];
+                if (bm.Count > 0 && bm.Current != null)
                 {
-                    ///TODO this is needs to sync with the binding on the 
-                    _selectedDelivery = (DeliveryDto) dg.CurrentRow.DataBoundItem;
-                 //  bsDeliveries.Current
+                    _selectedDelivery  = (DeliveryDto)bm.Current;
+                    bsSelectedDelivery.DataSource = _selectedDelivery;
+                    if (OnDeliverySelected != null)
+                    {
+                        OnDeliverySelected(this, new DeliverySelectedEventArgs { selectedDelivery = _selectedDelivery });
+                    }                      
                 }
             }
         }
 
+        
         #region Pickers
         //-----------------
         private void cboEmployeePicker_SelectedIndexChanged_1(object sender, EventArgs e)
@@ -234,7 +260,6 @@ namespace DeliveryWeasel.UserControls
             EmployeeDto dto = (EmployeeDto)cbx.SelectedItem;
             _selectedDelivery.EmployeeID = dto.EmployeeID;
             _selectedDelivery.DriverName = dto.EmployeeName;
-
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
@@ -242,7 +267,11 @@ namespace DeliveryWeasel.UserControls
             DateTimePicker dtp = (DateTimePicker)sender;
             _selectedDelivery.DeliveryDate = dtp.Value;
         }
-
+        /// <summary>
+        /// Job Picker
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cboJobPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox cbx = (ComboBox)sender;
@@ -250,6 +279,7 @@ namespace DeliveryWeasel.UserControls
             bsDeliveries.DataSource = _deliveryService.JobDeliveries(_activeJob.JobID);
             isDirty = false;
             ToogleButtonStyle(IsDirty);
+            OnSelectJob(new JobSelectedEventArgs { JobID = _activeJob.JobID });
         }
 
         //------------------

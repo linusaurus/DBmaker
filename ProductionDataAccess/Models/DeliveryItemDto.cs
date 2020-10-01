@@ -16,9 +16,9 @@ namespace ProductionDataAccess.Models
         public bool? Delivered { get; set; }
         public int? PartID { get; set; }
         public decimal? Qnty { get; set; }
-
         public int? SubAssemblyID { get; set; }
-
+        public string ItemReferenceType { get; set; }
+        public int ItemReference { get; set; }
         public virtual Delivery Delivery { get; set; }
     }
 }

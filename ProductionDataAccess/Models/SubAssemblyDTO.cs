@@ -15,10 +15,8 @@ namespace ProductionDataAccess
         public decimal? w { get; set; }
         public decimal? h { get; set; }
         public decimal? d { get; set; }
-
         public int? glassPartID { get; set; }
         public int? cPD_id { get; set; }
-
 
         public int? GlassPartID
         {
@@ -117,10 +115,6 @@ namespace ProductionDataAccess
         }
 
         public List<Part> Parts { get; set; }
-
-
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

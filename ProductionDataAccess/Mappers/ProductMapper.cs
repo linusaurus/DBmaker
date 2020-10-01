@@ -10,6 +10,7 @@ namespace ProductionDataAccess.Mappers
     public class ProductMapper : IMapper<Product, ProductDto>
     {
         private readonly IMapper<SubAssembly, SubAssemblyDTO> subAssemblyMapper = new SubAssemblyMapper();
+        
         public void Map(Product source, ProductDto destination)
         {
             destination.ProductID = source.ProductID;
@@ -28,7 +29,6 @@ namespace ProductionDataAccess.Mappers
             destination.SubAssemblies = subAssemblyMapper.MapList(source.SubAssembly);
         }
 
-        
     }
 
     public class SubAssemblyMapper : IMapper<SubAssembly, SubAssemblyDTO>
@@ -47,5 +47,17 @@ namespace ProductionDataAccess.Mappers
         }
     }
 
-    
+    public class JobProductMapper : IMapper<Job, JobListDto>
+    {
+        private readonly IMapper<Product, ProductDto> productMapper = new ProductMapper();
+        public void Map(Job source, JobListDto destination)
+        {
+            destination.JobID = source.JobID;
+            destination.JobName = source.JobName;
+            destination.Products = productMapper.MapList(source.Product);
+        }
+    }
+
+
+
 }

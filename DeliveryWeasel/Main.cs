@@ -44,6 +44,7 @@ namespace DeliveryWeasel
             delCtl = new UserControls.DeliveriesListControl();
             spcMainVertical.Panel1.Controls.Add(delCtl);
             delCtl.Dock = DockStyle.Fill;
+           
           
             comboBox1.SelectedIndexChanged += ComboBox1_SelectedIndexChanged;
 
