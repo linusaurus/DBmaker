@@ -43,13 +43,7 @@ namespace ProductionDataAccess.Services
             DeliveryDto Dto = new DeliveryDto();
             deliveryMapper.Map(entity, Dto);
             return Dto;
-
         }
-
-        //public List<DeliveryItemDto> GetDeliveryItems()
-        //{
-
-        //}
 
         public DeliveryDto New(int jobID,int empid)
         {
@@ -102,7 +96,7 @@ namespace ProductionDataAccess.Services
 
         public void CreateOrUpdateDelivery(DeliveryDto deliveryDTO)
         {
-            var delivery = ctx.Delivery.FirstOrDefault(d => d.DeliveryID == deliveryDTO.DeliveryID);
+            var delivery = ctx.Delivery.Include(r => r.DeliveryItem).FirstOrDefault(d => d.DeliveryID == deliveryDTO.DeliveryID);
             if (delivery == null)
             {
                 delivery = new Delivery();
@@ -114,7 +108,7 @@ namespace ProductionDataAccess.Services
             delivery.EmployeeID = deliveryDTO.EmployeeID.GetValueOrDefault();
             delivery.JobID = deliveryDTO.JobID.GetValueOrDefault();
             delivery.JobSiteID = deliveryDTO.JobSiteID;
-            delivery.ItemCount = delivery.ItemCount;
+            delivery.ItemCount = delivery.DeliveryItem.Count();
 
             // remove deleted deliveryItems -
             delivery.DeliveryItem
@@ -123,24 +117,23 @@ namespace ProductionDataAccess.Services
 
             //update of add new delivery items -
 
-            deliveryDTO.DeliveryItemDto.ToList().ForEach(deliveryDto =>
+            deliveryDTO.DeliveryItemDto.ToList().ForEach(Dto =>
             {
-                var detail = delivery.DeliveryItem.FirstOrDefault(d => d.DeliveryItemID == deliveryDto.DeliveryItemID);
+                var detail = delivery.DeliveryItem.FirstOrDefault(d => d.DeliveryItemID == Dto.DeliveryItemID);
                 if (detail == null)
                 {
                     detail = new DeliveryItem();
                     delivery.DeliveryItem.Add(detail);
                 }
 
-                detail.Delivered = deliveryDto.Delivered;
-                detail.DeliveryID = deliveryDto.DeliveryID;
-                detail.Description = deliveryDto.Description;
-                detail.ItemDescription = deliveryDto.ItemDescription;
-                detail.Onboard = deliveryDto.Onboard;
-                detail.PartID = deliveryDto.PartID.GetValueOrDefault();
-                detail.ProductID = deliveryDto.ProductID.GetValueOrDefault();
-                detail.Qnty = deliveryDto.Qnty.GetValueOrDefault();
-                detail.SubAssemblyID = deliveryDto.SubAssemblyID.GetValueOrDefault();
+                detail.Delivered = Dto.Delivered;
+                detail.DeliveryID = Dto.DeliveryID;
+                detail.Description = Dto.Description;
+                detail.Onboard = Dto.Onboard;
+                detail.PartID = Dto.PartID.GetValueOrDefault();
+                detail.ProductID = Dto.ProductID.GetValueOrDefault();
+                detail.Qnty = Dto.Qnty.GetValueOrDefault();
+                detail.SubAssemblyID = Dto.SubAssemblyID.GetValueOrDefault();
 
             });
 

@@ -69,13 +69,7 @@ namespace DBmaker.Data
 
             modelBuilder.Entity<DeliveryItem>(entity =>
             {
-                entity.Property(e => e.DeliveryItemID).ValueGeneratedNever();
-
-                entity.Property(e => e.Description).HasMaxLength(50);
-
-                entity.Property(e => e.ItemDescription).HasMaxLength(50);
-
-                entity.Property(e => e.Qnty).HasColumnType("decimal(18, 2)");
+                entity.HasKey(e => e.DeliveryItemID);
 
                 entity.HasOne(d => d.Delivery)
                     .WithMany(p => p.DeliveryItem)

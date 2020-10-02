@@ -27,7 +27,6 @@ namespace ProductionDataAccess.Mappers
             destination.State = source.JobSite.State;
             destination.Zip = source.JobSite.Zip;
             
-
             destination.DeliveryItemDto = deliveryItemMapper.MapList(source.DeliveryItem);
     
         }
@@ -42,7 +41,6 @@ namespace ProductionDataAccess.Mappers
             destination.DeliveryItemID = source.DeliveryItemID;
             destination.DeliveryID = source.DeliveryID.GetValueOrDefault();
             destination.Description = source.Description;
-            destination.ItemDescription = source.ItemDescription;
             destination.ItemReference = source.ItemReference.GetValueOrDefault();
             destination.ItemReferenceType = source.ItemReferenceType;
             destination.PartID = source.PartID.GetValueOrDefault();

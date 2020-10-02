@@ -69,44 +69,44 @@ namespace DeliveryWeasel.UserControls
             set { isDirty = value; }
         }
 
-        private void ToogleButtonStyle(bool dirtyState)
-        {
-            if (dirtyState == true)
-            {
-                btnSave.BackColor = System.Drawing.Color.Cornsilk;
-                btnSave.FlatStyle = FlatStyle.Flat;
-                btnSave.FlatAppearance.BorderColor = Color.Red;
-                btnSave.FlatAppearance.BorderSize = 3;
-            }
+        //private void ToogleButtonStyle(bool dirtyState)
+        //{
+        //    if (dirtyState == true)
+        //    {
+        //        btnSave.BackColor = System.Drawing.Color.Cornsilk;
+        //        btnSave.FlatStyle = FlatStyle.Flat;
+        //        btnSave.FlatAppearance.BorderColor = Color.Red;
+        //        btnSave.FlatAppearance.BorderSize = 3;
+        //    }
 
-            else if (dirtyState == false)
-            {
-                btnSave.BackColor = Color.Gainsboro;
-                btnSave.FlatAppearance.BorderColor = Color.Cornsilk;
-            }
-        }
+        //    else if (dirtyState == false)
+        //    {
+        //        btnSave.BackColor = Color.Gainsboro;
+        //        btnSave.FlatAppearance.BorderColor = Color.Cornsilk;
+        //    }
+        //}
 
-        private void CheckForDirtyState(ListChangedEventArgs e)
-        {
-            if (e.ListChangedType == System.ComponentModel.ListChangedType.ItemChanged)
-            {
-                btnSave.Enabled = true;
-                isDirty = true;
-                ToogleButtonStyle(isDirty);
-            }
-            if (e.ListChangedType == ListChangedType.ItemDeleted)
-            {
-                btnSave.Enabled = true;
-                isDirty = true;
-                ToogleButtonStyle(isDirty);
-            }
-            if (e.ListChangedType == ListChangedType.ItemAdded)
-            {
-                btnSave.Enabled = true;
-                isDirty = true;
-                ToogleButtonStyle(isDirty);
-            }
-        }
+        //private void CheckForDirtyState(ListChangedEventArgs e)
+        //{
+        //    if (e.ListChangedType == System.ComponentModel.ListChangedType.ItemChanged)
+        //    {
+        //        btnSave.Enabled = true;
+        //        isDirty = true;
+        //        ToogleButtonStyle(isDirty);
+        //    }
+        //    if (e.ListChangedType == ListChangedType.ItemDeleted)
+        //    {
+        //        btnSave.Enabled = true;
+        //        isDirty = true;
+        //        ToogleButtonStyle(isDirty);
+        //    }
+        //    if (e.ListChangedType == ListChangedType.ItemAdded)
+        //    {
+        //        btnSave.Enabled = true;
+        //        isDirty = true;
+        //        ToogleButtonStyle(isDirty);
+        //    }
+        //}
 
         #endregion
 
@@ -138,7 +138,8 @@ namespace DeliveryWeasel.UserControls
       
 
         private void BsDeliveries_ListChanged(object sender, ListChangedEventArgs e)
-        { CheckForDirtyState(e);}
+        { //CheckForDirtyState(e);
+        }
            
         
         private void BindControls()
@@ -241,7 +242,8 @@ namespace DeliveryWeasel.UserControls
                 BindingManagerBase bm = BindingContext[dgDeliveryGrid.DataSource, dgDeliveryGrid.DataMember];
                 if (bm.Count > 0 && bm.Current != null)
                 {
-                    _selectedDelivery  = (DeliveryDto)bm.Current;
+                   int k = ((DeliveryDto)bm.Current).DeliveryID;
+                    _selectedDelivery = _deliveryService.FindDelivery(k);
                     bsSelectedDelivery.DataSource = _selectedDelivery;
                     if (OnDeliverySelected != null)
                     {
@@ -250,8 +252,7 @@ namespace DeliveryWeasel.UserControls
                 }
             }
         }
-
-        
+       
         #region Pickers
         //-----------------
         private void cboEmployeePicker_SelectedIndexChanged_1(object sender, EventArgs e)
@@ -277,21 +278,16 @@ namespace DeliveryWeasel.UserControls
             ComboBox cbx = (ComboBox)sender;
             _activeJob = (JobListDto)cbx.SelectedItem;
             bsDeliveries.DataSource = _deliveryService.JobDeliveries(_activeJob.JobID);
+
             isDirty = false;
-            ToogleButtonStyle(IsDirty);
+            //ToogleButtonStyle(IsDirty);
             OnSelectJob(new JobSelectedEventArgs { JobID = _activeJob.JobID });
         }
 
         //------------------
         #endregion
 
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            SaveChanges();
-            //Reload --
-            isDirty = false;
-            ToogleButtonStyle(IsDirty);
-        }
+       
     }
 
 

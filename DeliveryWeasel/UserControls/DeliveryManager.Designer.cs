@@ -36,7 +36,7 @@ namespace DeliveryWeasel.UserControls
             this.tbpSubAssemblies = new System.Windows.Forms.TabPage();
             this.dgSubAssemblies = new System.Windows.Forms.DataGridView();
             this.tbDeliveryItems = new System.Windows.Forms.TabPage();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgDeliveryItems = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.spcDeliveryItems)).BeginInit();
             this.spcDeliveryItems.Panel1.SuspendLayout();
             this.spcDeliveryItems.Panel2.SuspendLayout();
@@ -45,8 +45,8 @@ namespace DeliveryWeasel.UserControls
             this.tbMiscItems.SuspendLayout();
             this.tbpSubAssemblies.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgSubAssemblies)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tbDeliveryItems.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgDeliveryItems)).BeginInit();
             this.SuspendLayout();
             // 
             // spcDeliveryItems
@@ -115,15 +115,7 @@ namespace DeliveryWeasel.UserControls
             // 
             // tbDeliveryItems
             // 
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(6, 6);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(923, 347);
-            this.dataGridView1.TabIndex = 0;
-            this.tbDeliveryItems.Controls.Add(this.dataGridView1);
+            this.tbDeliveryItems.Controls.Add(this.dgDeliveryItems);
             this.tbDeliveryItems.Location = new System.Drawing.Point(4, 24);
             this.tbDeliveryItems.Name = "tbDeliveryItems";
             this.tbDeliveryItems.Padding = new System.Windows.Forms.Padding(6);
@@ -131,6 +123,14 @@ namespace DeliveryWeasel.UserControls
             this.tbDeliveryItems.TabIndex = 1;
             this.tbDeliveryItems.Text = "Delivery Items";
             this.tbDeliveryItems.UseVisualStyleBackColor = true;
+            // 
+            // dgDeliveryItems
+            // 
+            this.dgDeliveryItems.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgDeliveryItems.Location = new System.Drawing.Point(6, 6);
+            this.dgDeliveryItems.Name = "dgDeliveryItems";
+            this.dgDeliveryItems.Size = new System.Drawing.Size(923, 347);
+            this.dgDeliveryItems.TabIndex = 0;
             // 
             // DeliveryManager
             // 
@@ -148,8 +148,8 @@ namespace DeliveryWeasel.UserControls
             this.tbMiscItems.ResumeLayout(false);
             this.tbpSubAssemblies.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgSubAssemblies)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tbDeliveryItems.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgDeliveryItems)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -162,6 +162,6 @@ namespace DeliveryWeasel.UserControls
         private TabControl tbMiscItems;
         private TabPage tbpSubAssemblies;
         private TabPage tbDeliveryItems;
-        private DataGridView dataGridView1;
+        private DataGridView dgDeliveryItems;
     }
 }

@@ -36,7 +36,6 @@
             this.txtDeliverID = new System.Windows.Forms.TextBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.cboJobPicker = new System.Windows.Forms.ComboBox();
-            this.btnSave = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgDeliveryGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,7 +58,7 @@
             this.dgDeliveryGrid.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dgDeliveryGrid.MinimumSize = new System.Drawing.Size(230, 0);
             this.dgDeliveryGrid.Name = "dgDeliveryGrid";
-            this.dgDeliveryGrid.Size = new System.Drawing.Size(276, 190);
+            this.dgDeliveryGrid.Size = new System.Drawing.Size(276, 346);
             this.dgDeliveryGrid.TabIndex = 0;
             this.dgDeliveryGrid.SelectionChanged += new System.EventHandler(this.dgDeliveryGrid_SelectionChanged_1);
             // 
@@ -86,7 +85,7 @@
             // cboEmployeePicker
             // 
             this.cboEmployeePicker.FormattingEnabled = true;
-            this.cboEmployeePicker.Location = new System.Drawing.Point(17, 344);
+            this.cboEmployeePicker.Location = new System.Drawing.Point(19, 499);
             this.cboEmployeePicker.Name = "cboEmployeePicker";
             this.cboEmployeePicker.Size = new System.Drawing.Size(184, 23);
             this.cboEmployeePicker.TabIndex = 4;
@@ -94,7 +93,7 @@
             // 
             // txtDeliverID
             // 
-            this.txtDeliverID.Location = new System.Drawing.Point(205, 315);
+            this.txtDeliverID.Location = new System.Drawing.Point(207, 470);
             this.txtDeliverID.Name = "txtDeliverID";
             this.txtDeliverID.Size = new System.Drawing.Size(86, 23);
             this.txtDeliverID.TabIndex = 5;
@@ -104,7 +103,7 @@
             // dateTimePicker1
             // 
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTimePicker1.Location = new System.Drawing.Point(15, 315);
+            this.dateTimePicker1.Location = new System.Drawing.Point(17, 470);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(184, 23);
             this.dateTimePicker1.TabIndex = 6;
@@ -119,21 +118,10 @@
             this.cboJobPicker.TabIndex = 7;
             this.cboJobPicker.SelectedIndexChanged += new System.EventHandler(this.cboJobPicker_SelectedIndexChanged);
             // 
-            // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(36, 415);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(216, 31);
-            this.btnSave.TabIndex = 8;
-            this.btnSave.Text = "Save Changes";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
             // DeliveriesListControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.cboJobPicker);
             this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.txtDeliverID);
@@ -144,7 +132,7 @@
             this.Controls.Add(this.dgDeliveryGrid);
             this.MinimumSize = new System.Drawing.Size(275, 0);
             this.Name = "DeliveriesListControl";
-            this.Size = new System.Drawing.Size(312, 534);
+            this.Size = new System.Drawing.Size(312, 683);
             ((System.ComponentModel.ISupportInitialize)(this.dgDeliveryGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -160,6 +148,5 @@
         private System.Windows.Forms.TextBox txtDeliverID;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.ComboBox cboJobPicker;
-        private System.Windows.Forms.Button btnSave;
     }
 }

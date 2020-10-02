@@ -18,38 +18,53 @@ namespace DeliveryWeasel
 
         DeliveryManager manager;
         DeliveryService deliveryService;
+        ProductService productService;
         
         public Scaffold()
         {
             InitializeComponent();
+
+            // Services --------------------------------------------------------------------
             deliveryService = new DeliveryService();
-
-            DeliveriesListControl ctl = new DeliveriesListControl();
-         
-            splitContainer1.Panel1.Controls.Add(ctl);
-            ctl.Dock = DockStyle.Fill;
-
-            ctl.OnJobSelected += Ctl_OnJobSelected;
-            ctl.OnDeliverySelected += Ctl_OnDeliverySelected;
-
-            manager= new DeliveryManager();
+            productService = new ProductService();
             
-    
+            // Controls ----------------------------------------------------------------------
+
+            DeliveriesListControl ctlDeliveries = new DeliveriesListControl();       
+            splitContainer1.Panel1.Controls.Add(ctlDeliveries);
+            ctlDeliveries.Dock = DockStyle.Fill;
+
+            ctlDeliveries.OnJobSelected += Ctl_OnJobSelected;
+            ctlDeliveries.OnDeliverySelected += Ctl_OnDeliverySelected;
+
+            manager= new DeliveryManager();             
             splitContainer1.Panel2.Controls.Add(manager);
             manager.Dock = DockStyle.Fill;
-            
 
-          
+            // Controls ---------------------------------------------------------------------
+ 
         }
 
         private void Ctl_OnDeliverySelected(object sender, DeliveriesListControl.DeliverySelectedEventArgs e)
         {
            var result = deliveryService.FindDelivery(e.selectedDelivery.DeliveryID);
+            manager.SetActiveDelivery(result);
         }
 
         private void Ctl_OnJobSelected(object sender, DeliveriesListControl.JobSelectedEventArgs e)
         {
            manager.SetDatasource(e.JobID);
+        }
+
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            deliveryService.CreateOrUpdateDelivery(manager.ActiveDelivery);
+            int k = manager.ActiveDelivery.DeliveryID;
+            var result = deliveryService.FindDelivery(k);
+            manager.SetActiveDelivery(result);
+            var job = manager.ActiveJob;
+            
+            
         }
     }
 }
