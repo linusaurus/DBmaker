@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using ProductionDataAccess.Services;
 using ProductionDataAccess.Models;
+using System.IO;
 
 namespace DeliveryWeasel
 {
@@ -44,7 +45,7 @@ namespace DeliveryWeasel
             // Controls ---------------------------------------------------------------------
  
         }
-
+        
         private void Ctl_OnDeliverySelected(object sender, DeliveriesListControl.DeliverySelectedEventArgs e)
         {
            var result = deliveryService.FindDelivery(e.selectedDelivery.DeliveryID);
@@ -55,16 +56,30 @@ namespace DeliveryWeasel
         {
            manager.SetDatasource(e.JobID);
         }
-
+        // Toolbar -----------------------------------------------------------------------
         private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            deliveryService.CreateOrUpdateDelivery(manager.ActiveDelivery);
-            int k = manager.ActiveDelivery.DeliveryID;
-            var result = deliveryService.FindDelivery(k);
-            manager.SetActiveDelivery(result);
-            var job = manager.ActiveJob;
+            switch ( e.ClickedItem.Name)
+            {
+                case "Save":
+
+                    deliveryService.CreateOrUpdateDelivery(manager.ActiveDelivery);
+                    int k = manager.ActiveDelivery.DeliveryID;
+                    var result = deliveryService.FindDelivery(k);
+                    manager.SetActiveDelivery(result);
+                    var job = manager.ActiveJob;
+                    break;
+                case "Print":
+
+                   
+                    break;
+
+            }
+
+           
             
             
         }
+        // Toolbar -------------------------------------------------------------------------
     }
 }

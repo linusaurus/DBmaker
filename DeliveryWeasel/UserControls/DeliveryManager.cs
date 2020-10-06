@@ -53,6 +53,18 @@ namespace DeliveryWeasel.UserControls
             //-----------------------------------------
             dgProductGrid.SelectionChanged += DgProductGrid_SelectionChanged;
             bsDeliveryItem.AddingNew += BsDeliveryItem_AddingNew;
+            dgSubAssemblies.CellClick += DgSubAssemblies_CellClick;
+        }
+
+        private void DgSubAssemblies_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex==0)
+            {
+                var d = (SubAssemblyDTO)dgSubAssemblies.Rows[e.RowIndex].DataBoundItem;
+                d.Delivered = true;
+                dgSubAssemblies.Rows[e.RowIndex].ReadOnly = true;
+                dgSubAssemblies.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Cornsilk;
+            };
         }
 
         private void BsDeliveryItem_AddingNew(object sender, AddingNewEventArgs e)
@@ -75,7 +87,8 @@ namespace DeliveryWeasel.UserControls
                 if (bm.Count > 0 && bm.Current != null)
                 {
                     _selectedProduct = (ProductDto)bm.Current;
-                    dgSubAssemblies.DataSource = _selectedProduct.SubAssemblies;
+                    bsSubAssemblies.DataSource = _selectedProduct.SubAssemblies;
+                    dgSubAssemblies.DataSource = bsSubAssemblies;
                 }
             }
         }
@@ -102,6 +115,8 @@ namespace DeliveryWeasel.UserControls
                 dgProductGrid.DataSource = bsProducts;
             }          
         }
+
+      
 
         private void BuildProductGrid(DataGridView dg)
         {
@@ -184,7 +199,7 @@ namespace DeliveryWeasel.UserControls
             #endregion
 
             // SubID ----------
-            DataGridViewTextBoxColumn colSubID = new DataGridViewTextBoxColumn();
+            DataGridViewButtonColumn colSubID = new DataGridViewButtonColumn();
             colSubID.Width = 60;
             colSubID.HeaderText = "SiD";
             colSubID.DataPropertyName = "SubAssemblyID";
@@ -196,11 +211,7 @@ namespace DeliveryWeasel.UserControls
             colSubName.DataPropertyName = "SubAssemblyName";
             colSubName.DefaultCellStyle = dstyleWrapText;
             colSubName.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            // Add to Delivery ----------
-            DataGridViewTextBoxColumn colAddToDelivery = new DataGridViewTextBoxColumn();
-            colAddToDelivery.Width = 120;
-            colAddToDelivery.HeaderText = "SubAssembly-Name";
-            colAddToDelivery.DataPropertyName = "SubAssemblyName";
+  
             // W ----------
             DataGridViewTextBoxColumn colSW = new DataGridViewTextBoxColumn();
             colSW.Width = 60;
@@ -233,7 +244,7 @@ namespace DeliveryWeasel.UserControls
             colSDelivered.DataPropertyName = "Delivered";
 
             
-            dg.Columns.AddRange(colSubID, colSubName, colSW, colSH, colGlassPart, colCPD, colSDelivered);
+            dg.Columns.AddRange(colSubID, colSubName,  colSW, colSH, colGlassPart, colCPD, colSDelivered);
 
         }
 

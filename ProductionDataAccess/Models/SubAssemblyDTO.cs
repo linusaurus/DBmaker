@@ -18,6 +18,18 @@ namespace ProductionDataAccess
         public int? glassPartID { get; set; }
         public int? cPD_id { get; set; }
 
+        public bool delivered { get; set; }
+
+        public bool Delivered
+        {
+            get { return delivered; }
+            set
+            {
+                delivered = value;
+                OnPropertyChange();
+            }
+        }
+
         public int? GlassPartID
         {
             get { return glassPartID; }
